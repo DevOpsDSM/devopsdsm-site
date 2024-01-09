@@ -1,0 +1,50 @@
+name: 2. VPC Infra
+
+on:
+  push:
+    paths:
+      - 'iac/vpc.yml'
+      - '.github/workflows/02-vpc.yml'
+    branches: [ "main" ]
+
+env:
+  AWS_REGION: "us-east-1"
+
+permissions:
+  id-token: write # This is required for aws oidc connection
+  contents: write # This is required for actions/checkout
+  pull-requests: write # This is required for gh bot to comment PR
+
+concurrency:
+  group: deployment_sequence
+  cancel-in-progress: true
+
+jobs:
+  test_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials from AWS account
+      uses: aws-actions/configure-aws-credentials@v1-node16
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE }}
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: GitHub-OIDC
+        role-duration-seconds: 1200
+
+    - name: Run VPC Test
+      run: |
+        pip install boto3
+        python -m unittest iac_tests.test_vpc_cloudformation
+
+    - name: Deploy VPC Infra to AWS
+      uses: aws-actions/aws-cloudformation-github-deploy@v1
+      with:
+        name: rag-eval-vpc-infra
+        template: iac/vpc.yml
+        capabilities: CAPABILITY_NAMED_IAM
+        no-fail-on-empty-changeset: "1"
+        tags: '[{"Key": "owner", "Value": "mvincent@sourceallies.com"}]'
