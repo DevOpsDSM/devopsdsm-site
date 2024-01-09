@@ -43,9 +43,9 @@ jobs:
         template: cfn/s3bucket.yml
         tags: '[{"Key": "owner", "Value": "cfunk@sourceallies.com"}]'
      
-     - name: Test upload to s3 bucket
-      run: |
-        echo "Testing" >> test.txt
-        aws s3 mv test.txt s3://${{ env.BUCKET_NAME }}
-        aws s3 ls
-        aws s3 ls s3://${{ env.BUCKET_NAME }}
+    - name: Test upload to s3 bucket
+     run: |
+       echo "Testing" >> test.txt
+       aws s3 mv test.txt s3://${{ env.BUCKET_NAME }}
+       aws s3 ls
+       aws s3 ls s3://${{ env.BUCKET_NAME }}
