@@ -41,3 +41,4 @@ jobs:
       with:
         name: devopsdsm-site-s3bucket
         template: cfn/s3bucket.yml
+        tags: '[{"Key": "owner", "Value": "cfunk@sourceallies.com"}]'
