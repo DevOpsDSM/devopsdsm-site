@@ -39,6 +39,10 @@ jobs:
     - name: Deploy CloudFormation stack to AWS
       uses: aws-actions/aws-cloudformation-github-deploy@v1
       with:
-        name: devopsdsm-site-s3bucket
+        name: ${{ env.BUCKET_NAME }}
         template: cfn/s3bucket.yml
         tags: '[{"Key": "owner", "Value": "cfunk@sourceallies.com"}]'
+
+    - name: Update index.html in s3 bucket
+     run: |
+      aws s3 mv ../cfn/index.html s3://${{ env.BUCKET_NAME }}

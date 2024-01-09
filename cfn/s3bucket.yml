@@ -5,6 +5,8 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: devopsdsm-site
+      VersioningConfiguration:
+        Status: Enabled
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: error.html
