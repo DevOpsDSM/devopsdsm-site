@@ -42,3 +42,7 @@ jobs:
         name: ${{ env.BUCKET_NAME }}
         template: cfn/s3bucket.yml
         tags: '[{"Key": "owner", "Value": "cfunk@sourceallies.com"}]'
+    
+    - name: Update index.htlm in s3
+      run: |
+        aws s3 sync cfn/index.htlm s3://${{ env.BUCKET_NAME }}
