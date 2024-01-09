@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - 'cfn/s3bucket.yml'
-      - '.github/workflows/02-vpc.yml'
+      - '.github/workflows/config.yml'
     branches: [ "main" ]
 
 env:
