@@ -1,0 +1,10 @@
+MyS3Bucket:
+  Type: AWS::S3::Bucket
+  Properties:
+    BucketName: devopsdsm-site
+    AccessControl: PublicRead
+    PublicAccessBlockConfiguration:
+      BlockPublicAcls: false
+      BlockPublicPolicy: false
+      IgnorePublicAcls: false
+      RestrictPublicBuckets: false
