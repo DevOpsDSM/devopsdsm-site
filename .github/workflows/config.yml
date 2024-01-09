@@ -35,3 +35,9 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
         role-session-name: GitHub-OIDC
         role-duration-seconds: 1200
+    
+    - name: Deploy CloudFormation stack to AWS
+      uses: aws-actions/aws-cloudformation-github-deploy@v1
+      with:
+        name: devopsdsm-site-bucket
+        template: cfn/s3bucket.yml
