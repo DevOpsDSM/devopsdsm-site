@@ -1,10 +1,13 @@
-MyS3Bucket:
-  Type: AWS::S3::Bucket
-  Properties:
-    BucketName: devopsdsm-site
-    AccessControl: PublicRead
-    PublicAccessBlockConfiguration:
-      BlockPublicAcls: false
-      BlockPublicPolicy: false
-      IgnorePublicAcls: false
-      RestrictPublicBuckets: false
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Template to create s3bucket with public access
+Resources:
+  MyS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: devopsdsm-site
+      AccessControl: PublicRead
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false

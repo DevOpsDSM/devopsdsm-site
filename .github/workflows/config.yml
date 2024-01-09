@@ -39,5 +39,5 @@ jobs:
     - name: Deploy CloudFormation stack to AWS
       uses: aws-actions/aws-cloudformation-github-deploy@v1
       with:
-        name: devopsdsm-site-bucket
+        name: devopsdsm-site-s3bucket
         template: cfn/s3bucket.yml
