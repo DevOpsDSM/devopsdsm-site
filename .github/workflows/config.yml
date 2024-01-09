@@ -35,17 +35,3 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
         role-session-name: GitHub-OIDC
         role-duration-seconds: 1200
-
-    - name: Deploy CloudFormation s3bucket stack to AWS
-      uses: aws-actions/aws-cloudformation-github-deploy@v1
-      with:
-        name: ${{ env.BUCKET_NAME }}
-        template: cfn/s3bucket.yml
-        tags: '[{"Key": "owner", "Value": "cfunk@sourceallies.com"}]'
-     
-    - name: Test upload to s3 bucket
-     run: |
-       echo "Testing" >> test.txt
-       aws s3 mv test.txt s3://${{ env.BUCKET_NAME }}
-       aws s3 ls
-       aws s3 ls s3://${{ env.BUCKET_NAME }}
