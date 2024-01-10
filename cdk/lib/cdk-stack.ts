@@ -10,7 +10,6 @@ export class CdkStack extends cdk.Stack {
     const bucket = new Bucket(this, 'devopsdsm-bucket', {
       bucketName: 'devopsdsm-site-bucket',
       encryption: BucketEncryption.S3_MANAGED,
-      websiteIndexDocument: 'app/index.html',
       publicReadAccess: false
     });
 
