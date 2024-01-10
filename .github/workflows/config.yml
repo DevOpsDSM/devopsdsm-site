@@ -39,6 +39,8 @@ jobs:
         
     - name: Install cdk npm dependencies
       run: npm ci
+      working-directory: cdk
+      
       
     - name: cdk diff
       uses: youyo/aws-cdk-github-actions@v2
