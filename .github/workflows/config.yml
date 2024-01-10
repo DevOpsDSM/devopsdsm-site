@@ -5,7 +5,8 @@ on:
     paths:
       - 'cfn/s3bucket.yml'
       - '.github/workflows/config.yml'
-    branches: [ "main" ]
+      - 'cdk/'
+    branches: [ "main", "dev-cdk" ]
 
 env:
   AWS_REGION: "us-east-1"
@@ -36,13 +37,7 @@ jobs:
         role-session-name: GitHub-OIDC
         role-duration-seconds: 1200
     
-    - name: Deploy CloudFormation stack to AWS
-      uses: aws-actions/aws-cloudformation-github-deploy@v1
+    - name: cdk diff
+      uses: youyo/aws-cdk-github-actions@v2
       with:
-        name: ${{ env.BUCKET_NAME }}
-        template: cfn/s3bucket.yml
-        tags: '[{"Key": "owner", "Value": "cfunk@sourceallies.com"}]'
-    
-    - name: Update index.htlm in s3
-      run: |
-        aws s3 sync cfn/index.htlm s3://${{ env.BUCKET_NAME }}
+        cdk_subcommand: 'diff'
