@@ -12,5 +12,5 @@ export class CdkStack extends cdk.Stack {
       websiteIndexDocument: 'index.html'
     });
 
-  
+  }
 }
