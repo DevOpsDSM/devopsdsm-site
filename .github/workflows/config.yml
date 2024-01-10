@@ -43,12 +43,7 @@ jobs:
       working-directory: cdk
 
     - name: cdk bootstrap
-      uses: youyo/aws-cdk-github-actions@v2
-      with:
-        cdk_subcommand: 'bootstrap'
-        cdk_args: '${{ env.AWS_ACCOUNT }}/${{ env.AWS_REGION }}'
-        working_dir: 'cdk'
-        cdk_stack: 'CdkStack'
+      run: cdk bootstrap
       
     - name: cdk diff
       uses: youyo/aws-cdk-github-actions@v2
