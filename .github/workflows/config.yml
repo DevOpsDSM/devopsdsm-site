@@ -41,9 +41,14 @@ jobs:
       run: npm ci
       working-directory: cdk
       
-      
     - name: cdk diff
       uses: youyo/aws-cdk-github-actions@v2
       with:
         cdk_subcommand: 'diff'
+        working_dir: 'cdk'
+
+    - name: cdk synth
+      uses: youyo/aws-cdk-github-actions@v2
+      with:
+        cdk_subcommand: 'synth'
         working_dir: 'cdk'
