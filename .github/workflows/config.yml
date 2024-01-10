@@ -38,7 +38,7 @@ jobs:
         role-duration-seconds: 1200
         
     - name: Install cdk npm dependencies
-      working_directory: cdk
+      working_directory: ./cdk
       run: npm ci
 
     - name: cdk diff
