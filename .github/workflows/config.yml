@@ -43,7 +43,7 @@ jobs:
       working-directory: cdk
 
     - name: cdk bootstrap
-      run: cdk bootstrap
+      run: npx cdk bootstrap
       
     - name: cdk diff
       uses: youyo/aws-cdk-github-actions@v2
