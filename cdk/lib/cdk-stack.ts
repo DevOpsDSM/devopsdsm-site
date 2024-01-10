@@ -1,6 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Bucket, BucketEncryption } from 'aws-cdk-lib/aws-s3';
+import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 
 export class CdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: cdk.StackProps) {
@@ -12,6 +13,11 @@ export class CdkStack extends cdk.Stack {
       websiteIndexDocument: 'index.html',
       publicReadAccess: false
     });
+
+    new BucketDeployment(this, 'devopsdsm-bucket-deployment', {
+      sources: [Source.asset('../../app')],
+      destinationBucket: bucket
+    })
 
   }
 }
