@@ -41,3 +41,4 @@ jobs:
       uses: youyo/aws-cdk-github-actions@v2
       with:
         cdk_subcommand: 'diff'
+        working_dir: 'cdk'
