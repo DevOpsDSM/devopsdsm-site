@@ -3,7 +3,6 @@ import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { CdkStack } from '../lib/cdk-stack';
 import { config } from '../config';
-import { AppProps } from '../@types'
 
 const app = new cdk.App();
 
@@ -12,11 +11,8 @@ const EnvConfig = {
     region: process.env.AWS_REGION
 }
 
-const envConfig = 
-    config[app.node.tryGetContext('environment')] ??
-    throwException('Error: --context environment must be Development set on command');
 
-const appConfig = config as AppProps;
+const appConfig = config as cdk.StackProps;
 
 new CdkStack(app, 'CdkStack', {
   ...appConfig
