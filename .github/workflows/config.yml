@@ -5,7 +5,7 @@ on:
     paths:
       - 'cfn/s3bucket.yml'
       - '.github/workflows/config.yml'
-      - 'cdk/'
+      - 'cdk/*'
     branches: [ "main", "dev-cdk" ]
 
 env:
