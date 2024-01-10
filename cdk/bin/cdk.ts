@@ -6,12 +6,6 @@ import { config } from '../config';
 
 const app = new cdk.App();
 
-const EnvConfig = {
-    account: process.env.AWS_ACCOUNT,
-    region: process.env.AWS_REGION
-}
-
-
 const appConfig = config as cdk.StackProps;
 
 new CdkStack(app, 'CdkStack', {
