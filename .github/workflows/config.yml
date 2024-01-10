@@ -52,3 +52,9 @@ jobs:
       with:
         cdk_subcommand: 'synth'
         working_dir: 'cdk'
+
+    - name: cdk deploy
+      uses: youyo/aws-cdk-github-actions@v2
+      with:
+        cdk_subcommand: 'deploy'
+        working_dir: 'cdk'
