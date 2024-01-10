@@ -10,6 +10,7 @@ on:
 
 env:
   AWS_REGION: "us-east-1"
+  AWS_ACCOUNT: "211125611494"
   BUCKET_NAME: "devopsdsm-s3-bucket"
 
 permissions:
@@ -53,10 +54,11 @@ jobs:
         cdk_subcommand: 'synth'
         working_dir: 'cdk'
 
-    - name: cdk synth
+    - name: cdk bootstrap
       uses: youyo/aws-cdk-github-actions@v2
       with:
         cdk_subcommand: 'bootstrap'
+        cdk_args: 'aws://${{ env.AWS_ACCOUNT }}/${{ env.AWS_REGION }}'
         working_dir: 'cdk'
 
     - name: cdk deploy
