@@ -5,10 +5,13 @@ on:
     paths:
       - 'cfn/s3bucket.yml'
       - '.github/workflows/config.yml'
-    branches: [ "main" ]
+      - 'cdk/bin/cdk.ts'
+      - 'cdk/lib/cdk-stack.ts'
+    branches: [ "main", "dev-cdk" ]
 
 env:
   AWS_REGION: "us-east-1"
+  AWS_ACCOUNT: "211125611494"
   BUCKET_NAME: "devopsdsm-s3-bucket"
 
 permissions:
@@ -35,14 +38,23 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
         role-session-name: GitHub-OIDC
         role-duration-seconds: 1200
-    
-    - name: Deploy CloudFormation stack to AWS
-      uses: aws-actions/aws-cloudformation-github-deploy@v1
-      with:
-        name: ${{ env.BUCKET_NAME }}
-        template: cfn/s3bucket.yml
-        tags: '[{"Key": "owner", "Value": "cfunk@sourceallies.com"}]'
-    
-    - name: Update index.htlm in s3
-      run: |
-        aws s3 sync cfn/index.htlm s3://${{ env.BUCKET_NAME }}
+        
+    - name: Install cdk npm dependencies
+      run: npm ci
+      working-directory: cdk
+
+    - name: cdk bootstrap
+      run: npx cdk bootstrap
+      working-directory: cdk
+      
+    - name: cdk diff
+      run: npx cdk diff
+      working-directory: cdk
+
+    - name: cdk synth
+      run: npx cdk synth
+      working-directory: cdk
+
+    - name: cdk deploy
+      run: npx cdk deploy --require-approval never
+      working-directory: cdk
