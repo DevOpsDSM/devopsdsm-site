@@ -12,7 +12,14 @@ export class CdkStack extends cdk.Stack {
       bucketName: 'devopsdsm-site-bucket',
       encryption: BucketEncryption.S3_MANAGED,
       websiteIndexDocument: 'index.html',
-      objectOwnership: ObjectOwnership.OBJECT_WRITER
+      objectOwnership: ObjectOwnership.OBJECT_WRITER,
+      publicReadAccess: true,
+	    blockPublicAccess: {
+		    blockPublicPolicy: false,
+		    blockPublicAcls: false,
+		    ignorePublicAcls: false,
+		    restrictPublicBuckets: false,
+	},
     });
 
     new BucketDeployment(this, 'devopsdsm-bucket-deployment', {
