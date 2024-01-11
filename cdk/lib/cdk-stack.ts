@@ -12,14 +12,14 @@ export class CdkStack extends cdk.Stack {
       bucketName: 'devopsdsm-site-bucket',
       encryption: BucketEncryption.S3_MANAGED,
       websiteIndexDocument: 'index.html',
-      publicReadAccess: false
+      publicReadAccess: true
     });
 
     const arnPrincipalID = `arn:aws:iam::${props.env?.account}:user/cfunk@sourceallies.com`
 
     new BucketDeployment(this, 'devopsdsm-bucket-deployment', {
       sources: [Source.asset('./app')],
-      destinationBucket: bucket
+      destinationBucket: bucket,
     });
 
 
