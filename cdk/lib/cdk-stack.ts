@@ -17,17 +17,6 @@ export class CdkStack extends cdk.Stack {
 
     const arnPrincipalID = `arn:aws:iam::${props.env?.account}:user/cfunk@sourceallies.com`
 
-    // bucket.addToResourcePolicy(
-    //   new PolicyStatement({
-    //     resources: [
-    //       bucket.arnForObjects("*"),
-    //       bucket.bucketArn,
-    //     ],
-    //     actions: ["s3:List*", "S3:Get*"],
-    //     principals: [new ArnPrincipal(arnPrincipalID)]
-    //   })
-    // )
-
     new BucketDeployment(this, 'devopsdsm-bucket-deployment', {
       sources: [Source.asset('./app')],
       destinationBucket: bucket
