@@ -12,7 +12,6 @@ on:
 env:
   AWS_REGION: "us-east-1"
   AWS_ACCOUNT: "211125611494"
-  BUCKET_NAME: "devopsdsm-s3-bucket"
 
 permissions:
   id-token: write # This is required for aws oidc connection
