@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { BucketStack } from '../lib/bucket-stack';
+import { CdkStack } from '../lib/cdk-stack';
 import { config } from '../config';
 
 const app = new cdk.App();
 
 const appConfig = config as cdk.StackProps;
 
-new BucketStack(app, 'BucketStack', {
+new CdkStack(app, 'CdkStack', {
   ...appConfig
 });
