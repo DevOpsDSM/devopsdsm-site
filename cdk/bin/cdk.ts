@@ -11,8 +11,3 @@ const appConfig = config as cdk.StackProps;
 new BucketStack(app, 'BucketStack', {
   ...appConfig
 });
-
-
-function throwException(errorMessage: string): never {
-    throw new Error(errorMessage);
-}
