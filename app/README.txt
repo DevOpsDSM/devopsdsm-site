@@ -1,1 +1,0 @@
-HTML Files for the static website DevOpsDSM
