@@ -2,7 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Bucket, BucketEncryption, ObjectOwnership } from 'aws-cdk-lib/aws-s3';
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
-import { AccountPrincipal, PolicyStatement, } from 'aws-cdk-lib/aws-iam';
+import { PolicyStatement, AnyPrincipal } from 'aws-cdk-lib/aws-iam';
 
 export class CdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: cdk.StackProps) {
@@ -28,7 +28,7 @@ export class CdkStack extends cdk.Stack {
           s3bucket.bucketArn
         ],
         actions: ["s3:List*", "S3:Get*"],
-        principals: [new AccountPrincipal(this.account)]
+        principals: [new AnyPrincipal()]
       })
     );
 
