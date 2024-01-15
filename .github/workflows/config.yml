@@ -6,7 +6,7 @@ on:
       - '.github/workflows/config.yml'
       - 'cdk/bin/cdk.ts'
       - 'cdk/lib/cdk-stack.ts'
-    branches: [ "main" ]
+    branches: [ "main", "s3-server-logs-and-cfn-distro" ]
 
 env:
   AWS_REGION: "us-east-1"
