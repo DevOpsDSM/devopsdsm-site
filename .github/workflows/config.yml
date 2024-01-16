@@ -2,10 +2,6 @@ name: 1. Configure and Test Actions
 
 on:
   push:
-    paths:
-      - '.github/workflows/config.yml'
-      - 'cdk/bin/cdk.ts'
-      - 'cdk/lib/cdk-stack.ts'
     branches: [ "main" ]
 
 env:
