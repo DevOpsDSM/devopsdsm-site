@@ -2,7 +2,7 @@ name: 1. Configure and Test Actions
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "r53-record-cfn-distro" ]
 
 env:
   AWS_REGION: "us-east-1"
