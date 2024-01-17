@@ -2,12 +2,14 @@
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { CdkStack } from '../lib/cdk-stack';
-import { config } from '../config';
 
 const app = new cdk.App();
 
-const appConfig = config as cdk.StackProps;
+let env = app.node.tryGetContext('config');
 
 new CdkStack(app, 'CdkStack', {
-  ...appConfig
+  env: {
+    account: env.props.aws_account,
+    region: env.props.aws_region
+  }
 });
