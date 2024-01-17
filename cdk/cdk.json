@@ -1,7 +1,5 @@
 {
   "app": "npx ts-node --prefer-ts-exts bin/cdk.ts",
-  "aws_account": "211125611494",
-  "aws_region": "us-east-1",
   "watch": {
     "include": [
       "**"
@@ -19,6 +17,10 @@
     ]
   },
   "context": {
+    "env": {
+      "aws_account": "211125611494",
+      "aws_region": "us-east-1"
+    },
     "@aws-cdk/aws-lambda:recognizeLayerVersion": true,
     "@aws-cdk/core:checkSecretUsage": true,
     "@aws-cdk/core:target-partitions": [
