@@ -18,8 +18,8 @@
   },
   "context": {
     "env": {
-      "aws_account": "211125611494",
-      "aws_region": "us-east-1"
+      "account": "211125611494",
+      "region": "us-east-1"
     },
     "@aws-cdk/aws-lambda:recognizeLayerVersion": true,
     "@aws-cdk/core:checkSecretUsage": true,
