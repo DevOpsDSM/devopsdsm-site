@@ -70,8 +70,9 @@ export class CdkStack extends cdk.Stack {
           originAccessIdentity: originAccess
         }),
         viewerProtocolPolicy: ViewerProtocolPolicy.ALLOW_ALL,
-        allowedMethods: AllowedMethods.ALLOW_ALL
-      }
+        allowedMethods: AllowedMethods.ALLOW_ALL,
+      },
+      domainNames: ["devopsdsm.com"]
     });
 
     const hostedZone = HostedZone.fromLookup(this, 'hosted-zone', {
