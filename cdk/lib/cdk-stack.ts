@@ -82,14 +82,14 @@ export class CdkStack extends cdk.Stack {
         viewerProtocolPolicy: ViewerProtocolPolicy.ALLOW_ALL,
         allowedMethods: AllowedMethods.ALLOW_ALL,
       },
-      domainNames: ["devopsdsm.com"],
+      domainNames: ["devopsdsm.com", "www.devopsdsm.com"],
       certificate: cert
     });
 
     const aliasRecord = new ARecord(this, 'r53-record-to-cfn-distro', {
       target: RecordTarget.fromAlias(new CloudFrontTarget(cfnDistro)),
       zone: hostedZone,
-      recordName: 'CloudFront-Distribution-Record'
+      recordName: 'www'
     });
 
   }
