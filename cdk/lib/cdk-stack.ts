@@ -8,7 +8,6 @@ import { S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
-import { HttpsRedirect } from 'aws-cdk-lib/aws-route53-patterns';
 
 export class CdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: cdk.StackProps) {
