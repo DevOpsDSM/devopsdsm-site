@@ -8,6 +8,7 @@ import { S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
+import { HttpsRedirect } from 'aws-cdk-lib/aws-route53-patterns';
 
 export class CdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: cdk.StackProps) {
@@ -70,7 +71,7 @@ export class CdkStack extends cdk.Stack {
     });
 
     const cert = new Certificate(this, 'devops-dsm-cert', {
-      domainName: "*.devopsdsm.com", 
+      domainName: "*.devopsdsm.com",
       validation: CertificateValidation.fromDns(hostedZone)
     });
 
@@ -79,17 +80,23 @@ export class CdkStack extends cdk.Stack {
         origin: new S3Origin(s3bucket, { 
           originAccessIdentity: originAccess
         }),
-        viewerProtocolPolicy: ViewerProtocolPolicy.ALLOW_ALL,
+        viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         allowedMethods: AllowedMethods.ALLOW_ALL,
       },
       domainNames: ["devopsdsm.com", "www.devopsdsm.com"],
       certificate: cert
     });
 
-    const aliasRecord = new ARecord(this, 'r53-record-to-cfn-distro', {
+    new ARecord(this, 'r53-record-to-cfn-distro', {
       target: RecordTarget.fromAlias(new CloudFrontTarget(cfnDistro)),
       zone: hostedZone,
       recordName: 'www'
+    });
+
+    new ARecord(this, 'r53-record-to-cfn-distro', {
+      target: RecordTarget.fromAlias(new CloudFrontTarget(cfnDistro)),
+      zone: hostedZone,
+      recordName: ''
     });
 
   }
