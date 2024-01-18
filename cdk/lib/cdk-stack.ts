@@ -87,7 +87,7 @@ export class CdkStack extends cdk.Stack {
       certificate: cert
     });
 
-    new ARecord(this, 'r53-www-record-to-cfn-distro', {
+    new ARecord(this, 'r53-record-to-cfn-distro', {
       target: RecordTarget.fromAlias(new CloudFrontTarget(cfnDistro)),
       zone: hostedZone,
       recordName: 'www'
@@ -98,6 +98,7 @@ export class CdkStack extends cdk.Stack {
       zone: hostedZone,
       recordName: ''
     });
+
 
   }
 }
