@@ -5,6 +5,9 @@ import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { PolicyStatement, AnyPrincipal, AccountPrincipal } from 'aws-cdk-lib/aws-iam';
 import { AllowedMethods, Distribution, OriginAccessIdentity, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
 import { S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
+import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
+import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
+import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
 
 export class CdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: cdk.StackProps) {
@@ -62,14 +65,31 @@ export class CdkStack extends cdk.Stack {
       comment: 'OAI for the CloudFront distribution of s3 static bucket devopsdsm-site'
     });
 
+    const hostedZone = HostedZone.fromLookup(this, 'hosted-zone', {
+      domainName: "devopsdsm.com"
+    });
+
+    const cert = new Certificate(this, 'devops-dsm-cert', {
+      domainName: "devopsdsm.com",
+      validation: CertificateValidation.fromDns(hostedZone)
+    });
+
     const cfnDistro = new Distribution(this, 'cfn-distro-for-devopsdsm', {
       defaultBehavior: {
         origin: new S3Origin(s3bucket, { 
           originAccessIdentity: originAccess
         }),
         viewerProtocolPolicy: ViewerProtocolPolicy.ALLOW_ALL,
-        allowedMethods: AllowedMethods.ALLOW_ALL
-      }
+        allowedMethods: AllowedMethods.ALLOW_ALL,
+      },
+      domainNames: ["devopsdsm.com"],
+      certificate: cert
+    });
+
+    const aliasRecord = new ARecord(this, 'r53-record-to-cfn-distro', {
+      target: RecordTarget.fromAlias(new CloudFrontTarget(cfnDistro)),
+      zone: hostedZone,
+      recordName: 'CloudFront-Distribution-Record'
     });
 
   }
