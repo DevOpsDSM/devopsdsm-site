@@ -70,7 +70,7 @@ export class CdkStack extends cdk.Stack {
     });
 
     const cert = new Certificate(this, 'devops-dsm-cert', {
-      domainName: "devopsdsm.com",
+      domainName: "*.devopsdsm.com", 
       validation: CertificateValidation.fromDns(hostedZone)
     });
 
