@@ -5,7 +5,7 @@ import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { PolicyStatement, AnyPrincipal, AccountPrincipal } from 'aws-cdk-lib/aws-iam';
 import { AllowedMethods, Distribution, OriginAccessIdentity, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
 import { S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
-import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
+import { ARecord, CnameRecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
 
@@ -98,6 +98,17 @@ export class CdkStack extends cdk.Stack {
       recordName: ''
     });
 
+    new CnameRecord(this, 'r53-cname-record-from-https-devopsdsm-com', {
+      recordName: 'https://',
+      zone: hostedZone,
+      domainName: "www.devopsdsm.com"
+    });
 
+    new CnameRecord(this, 'r53-cname-record-from-http-devopsdsm-com', {
+      recordName: 'http://',
+      zone: hostedZone,
+      domainName: "www.devopsdsm.com"
+    });
+    
   }
 }
