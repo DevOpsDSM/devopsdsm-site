@@ -98,7 +98,7 @@ export class CdkStack extends cdk.Stack {
     });
 
     const secret = Secret.fromSecretNameV2(this, 'cdk-stack-secrets', 'cdk-stack');
-    const certArn = secret.secretValueFromJson('certificate_arn').toString();
+    const certArn = secret.secretValueFromJson('certificate_arn').unsafeUnwrap();
 
     const cert = Certificate.fromCertificateArn(this, 'www.devopsdsm.com', certArn);
 
