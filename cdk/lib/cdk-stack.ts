@@ -37,7 +37,13 @@ export class CdkStack extends cdk.Stack {
       websiteRedirect: {
         hostName: 'www.devopsdsm.com',
         protocol: RedirectProtocol.HTTPS
-      }
+      },
+      blockPublicAccess: {
+		    blockPublicPolicy: false,
+		    blockPublicAcls: false,
+		    ignorePublicAcls: false,
+		    restrictPublicBuckets: false,
+	    }
     });
 
     s3redirectBucket.addToResourcePolicy(
@@ -123,7 +129,7 @@ export class CdkStack extends cdk.Stack {
     });
 
     new ARecord(this, 'r53-blank-record-to-cfn-distro', {
-      target: RecordTarget.fromAlias(new CloudFrontTarget(cfnDistro)),
+      target: RecordTarget.fromAlias(new CloudFrontTarget(cfnDistroRoot)),
       zone: hostedZone,
       recordName: ''
     });
