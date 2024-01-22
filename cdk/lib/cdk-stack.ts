@@ -53,7 +53,7 @@ export class CdkStack extends cdk.Stack {
           s3redirectBucket.bucketArn
         ],
         actions: ["s3:List*", "S3:Get*"],
-        principals: [new AccountPrincipal(this.account)],
+        principals: [new AnyPrincipal()],
       })
     );
 
