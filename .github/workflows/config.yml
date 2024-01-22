@@ -6,7 +6,6 @@ on:
 
 env:
   AWS_REGION: "us-east-1"
-  AWS_ACCOUNT: "211125611494"
 
 permissions:
   id-token: write # This is required for aws oidc connection
@@ -47,8 +46,4 @@ jobs:
 
     - name: cdk synth
       run: npx cdk synth
-      working-directory: cdk
-
-    - name: cdk deploy
-      run: npx cdk deploy --require-approval never
       working-directory: cdk

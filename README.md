@@ -1,7 +1,7 @@
 # devopsdsm-site
 Simple website for DevOpsDSM with links and redirects to X, LinkedIn, and Meetup pages.
 
-We have a Github workflow connected to our AWS Account 211125611494 which has triggers on certain files under paths.
+We have a Github workflow which has triggers on certain files under paths.
 For development, you can modify the branches which these triggers go off of to have Github actions run after pushes to that branch rather than only to main branch.
 
 In the workflow it configures AWS Credentials and runs CDK commands to deploy materials we have in the cdk directory. 

@@ -111,9 +111,15 @@ export class CdkStack extends cdk.Stack {
       certificate: cert
     });
 
+    const originAccessRoot = new OriginAccessIdentity(this, 'devopsdsm-oai-policy-root', {
+      comment: 'OAI for the CloudFront distribution of s3 static bucket devopsdsm.com'
+    });
+
     const cfnDistroRoot = new Distribution(this, 'cfn-distro-for-devopsdsm-root-domain', {
       defaultBehavior: {
-        origin: new HttpOrigin('www.devopsdsm.com.s3-website-us-east-1.amazonaws.com'),
+        origin: new S3Origin(s3redirectBucket, { 
+          originAccessIdentity: originAccessRoot
+        }),
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         allowedMethods: AllowedMethods.ALLOW_ALL,
         cachePolicy: CachePolicy.CACHING_DISABLED
