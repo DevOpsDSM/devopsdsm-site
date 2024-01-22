@@ -37,10 +37,8 @@ jobs:
       working-directory: cdk
 
     - name: cdk bootstrap
-      run: npx cdk bootstrap
+      run: npx cdk bootstrap ${{ secrets.AWS_ACCOUNT }}/${{ env.AWS_REGION }}
       working-directory: cdk
-      with:
-        aws_account: ${{ secrets.AWS_ACCOUNT }}
       
     - name: cdk diff
       run: npx cdk diff
