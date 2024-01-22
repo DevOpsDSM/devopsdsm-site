@@ -39,6 +39,8 @@ jobs:
     - name: cdk bootstrap
       run: npx cdk bootstrap
       working-directory: cdk
+      with:
+        aws_account: ${{ secrets.AWS_ACCOUNT }}
       
     - name: cdk diff
       run: npx cdk diff
