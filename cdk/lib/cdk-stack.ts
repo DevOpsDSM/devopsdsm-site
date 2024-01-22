@@ -3,8 +3,8 @@ import { Construct } from 'constructs';
 import { Bucket, BucketEncryption, ObjectOwnership, RedirectProtocol } from 'aws-cdk-lib/aws-s3';
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { PolicyStatement, AnyPrincipal, AccountPrincipal } from 'aws-cdk-lib/aws-iam';
-import { AllowedMethods, Distribution, OriginAccessIdentity, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
-import { S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
+import { AllowedMethods, CachePolicy, Distribution, OriginAccessIdentity, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
+import { HttpOrigin, S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
@@ -102,6 +102,17 @@ export class CdkStack extends cdk.Stack {
       },
       domainNames: ["www.devopsdsm.com"],
       defaultRootObject: "index.html",
+      certificate: cert
+    });
+
+    const cfnDistroRoot = new Distribution(this, 'cfn-distro-for-devopsdsm-root-domain', {
+      defaultBehavior: {
+        origin: new HttpOrigin('http://www.devopsdsm.com.s3-website-us-east-1.amazonaws.com'),
+        viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        allowedMethods: AllowedMethods.ALLOW_ALL,
+        cachePolicy: CachePolicy.CACHING_DISABLED
+      },
+      domainNames: ["devopsdsm.com"],
       certificate: cert
     });
 
