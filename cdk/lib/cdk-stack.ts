@@ -30,8 +30,25 @@ export class CdkStack extends cdk.Stack {
       })
     );
 
+    const s3redirectBucket = new Bucket(this, 'devopsdsm-redirect-bucket', {
+      bucketName: 'devopsdsm.com',
+      encryption: BucketEncryption.S3_MANAGED,
+      objectOwnership: ObjectOwnership.OBJECT_WRITER
+    });
+
+    s3redirectBucket.addToResourcePolicy(
+      new PolicyStatement({
+        resources: [
+          s3redirectBucket.arnForObjects("*"),
+          s3redirectBucket.bucketArn
+        ],
+        actions: ["s3:List*", "S3:Get*"],
+        principals: [new AccountPrincipal(this.account)],
+      })
+    );
+
     const s3bucket = new Bucket(this, 'devopsdsm-bucket', {
-      bucketName: 'devopsdsm-site',
+      bucketName: 'www.devopsdsm.com',
       encryption: BucketEncryption.S3_MANAGED,
       websiteIndexDocument: 'index.html',
       objectOwnership: ObjectOwnership.OBJECT_WRITER,
@@ -69,10 +86,7 @@ export class CdkStack extends cdk.Stack {
       domainName: "devopsdsm.com"
     });
 
-    const cert = new Certificate(this, 'devops-dsm-cert', {
-      domainName: "*.devopsdsm.com",
-      validation: CertificateValidation.fromDns(hostedZone)
-    });
+    const cert = Certificate.fromCertificateArn(this, 'www.devopsdsm.com', "arn:aws:acm:us-east-1:211125611494:certificate/17599974-f955-4174-a0ee-7377f9c5b8a1");
 
     const cfnDistro = new Distribution(this, 'cfn-distro-for-devopsdsm', {
       defaultBehavior: {

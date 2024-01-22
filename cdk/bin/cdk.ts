@@ -10,6 +10,7 @@ const appConfig = app.node.tryGetContext('config');
 new CdkStack(app, 'CdkStack', {
   env: {
     account: appConfig.account,
-    region: appConfig.region
+    region: appConfig.region,
+    
   }
 }); 
