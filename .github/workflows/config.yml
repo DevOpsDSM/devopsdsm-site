@@ -47,3 +47,7 @@ jobs:
     - name: cdk synth
       run: npx cdk synth
       working-directory: cdk
+
+    - name: cdk deploy
+      run: npx cdk deploy --require-approval never
+      working-directory: cdk
