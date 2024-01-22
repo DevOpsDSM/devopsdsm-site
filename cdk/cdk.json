@@ -18,7 +18,6 @@
   },
   "context": {
     "config": {
-      "account": "211125611494",
       "region": "us-east-1"
     },
     "@aws-cdk/aws-lambda:recognizeLayerVersion": true,

@@ -4,10 +4,11 @@ import { Bucket, BucketEncryption, ObjectOwnership, RedirectProtocol } from 'aws
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { PolicyStatement, AnyPrincipal, AccountPrincipal } from 'aws-cdk-lib/aws-iam';
 import { AllowedMethods, CachePolicy, Distribution, OriginAccessIdentity, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
-import { HttpOrigin, S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
+import { S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
+import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 
 export class CdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: cdk.StackProps) {
@@ -96,7 +97,10 @@ export class CdkStack extends cdk.Stack {
       domainName: "devopsdsm.com"
     });
 
-    const cert = Certificate.fromCertificateArn(this, 'www.devopsdsm.com', "arn:aws:acm:us-east-1:211125611494:certificate/17599974-f955-4174-a0ee-7377f9c5b8a1");
+    const secret = Secret.fromSecretNameV2(this, 'cdk-stack-secrets', 'cdk-stack');
+    const certArn = secret.secretValueFromJson('certificate_arn').toString();
+
+    const cert = Certificate.fromCertificateArn(this, 'www.devopsdsm.com', certArn);
 
     const cfnDistro = new Distribution(this, 'cfn-distro-for-devopsdsm', {
       defaultBehavior: {
