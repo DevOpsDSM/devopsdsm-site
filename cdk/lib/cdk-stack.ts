@@ -1,6 +1,6 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { Bucket, BucketEncryption, ObjectOwnership, RedirectProtocol } from 'aws-cdk-lib/aws-s3';
+import { Bucket, BucketEncryption, ObjectOwnership } from 'aws-cdk-lib/aws-s3';
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { PolicyStatement, AnyPrincipal, AccountPrincipal } from 'aws-cdk-lib/aws-iam';
 import { AllowedMethods, Distribution, OriginAccessIdentity, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
@@ -33,6 +33,7 @@ export class CdkStack extends cdk.Stack {
     const s3bucket = new Bucket(this, 'devopsdsm-bucket', {
       bucketName: 'devopsdsm-site',
       encryption: BucketEncryption.S3_MANAGED,
+      websiteIndexDocument: 'index.html',
       objectOwnership: ObjectOwnership.OBJECT_WRITER,
       versioned: true,
 	    blockPublicAccess: {
@@ -41,11 +42,7 @@ export class CdkStack extends cdk.Stack {
 		    ignorePublicAcls: false,
 		    restrictPublicBuckets: false,
 	    },
-      serverAccessLogsBucket: s3ServerLogsBucket,
-      websiteRedirect: {
-        hostName: 'www.devopsdsm.com',
-        protocol:RedirectProtocol.HTTPS
-      }
+      serverAccessLogsBucket: s3ServerLogsBucket
     });
 
     s3bucket.addToResourcePolicy(
