@@ -2,11 +2,10 @@ name: 1. Configure and Test Actions
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "add-apex-records" ]
 
 env:
   AWS_REGION: "us-east-1"
-  AWS_ACCOUNT: "211125611494"
 
 permissions:
   id-token: write # This is required for aws oidc connection
@@ -38,7 +37,7 @@ jobs:
       working-directory: cdk
 
     - name: cdk bootstrap
-      run: npx cdk bootstrap
+      run: npx cdk bootstrap ${{ secrets.AWS_ACCOUNT }}/${{ env.AWS_REGION }}
       working-directory: cdk
       
     - name: cdk diff

@@ -1,13 +1,14 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { Bucket, BucketEncryption, ObjectOwnership } from 'aws-cdk-lib/aws-s3';
+import { Bucket, BucketEncryption, ObjectOwnership, RedirectProtocol } from 'aws-cdk-lib/aws-s3';
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { PolicyStatement, AnyPrincipal, AccountPrincipal } from 'aws-cdk-lib/aws-iam';
-import { AllowedMethods, Distribution, OriginAccessIdentity, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
+import { AllowedMethods, CachePolicy, Distribution, OriginAccessIdentity, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
 import { S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
-import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
+import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
+import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 
 export class CdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: cdk.StackProps) {
@@ -30,8 +31,35 @@ export class CdkStack extends cdk.Stack {
       })
     );
 
+    const s3redirectBucket = new Bucket(this, 'devopsdsm-redirect-bucket', {
+      bucketName: 'devopsdsm.com',
+      encryption: BucketEncryption.S3_MANAGED,
+      objectOwnership: ObjectOwnership.OBJECT_WRITER,
+      websiteRedirect: {
+        hostName: 'www.devopsdsm.com',
+        protocol: RedirectProtocol.HTTPS
+      },
+      blockPublicAccess: {
+		    blockPublicPolicy: false,
+		    blockPublicAcls: false,
+		    ignorePublicAcls: false,
+		    restrictPublicBuckets: false,
+	    }
+    });
+
+    s3redirectBucket.addToResourcePolicy(
+      new PolicyStatement({
+        resources: [
+          s3redirectBucket.arnForObjects("*"),
+          s3redirectBucket.bucketArn
+        ],
+        actions: ["s3:List*", "S3:Get*"],
+        principals: [new AnyPrincipal()],
+      })
+    );
+
     const s3bucket = new Bucket(this, 'devopsdsm-bucket', {
-      bucketName: 'devopsdsm-site',
+      bucketName: 'www.devopsdsm.com',
       encryption: BucketEncryption.S3_MANAGED,
       websiteIndexDocument: 'index.html',
       objectOwnership: ObjectOwnership.OBJECT_WRITER,
@@ -42,7 +70,7 @@ export class CdkStack extends cdk.Stack {
 		    ignorePublicAcls: false,
 		    restrictPublicBuckets: false,
 	    },
-      serverAccessLogsBucket: s3ServerLogsBucket,
+      serverAccessLogsBucket: s3ServerLogsBucket
     });
 
     s3bucket.addToResourcePolicy(
@@ -69,10 +97,10 @@ export class CdkStack extends cdk.Stack {
       domainName: "devopsdsm.com"
     });
 
-    const cert = new Certificate(this, 'devops-dsm-cert', {
-      domainName: "*.devopsdsm.com",
-      validation: CertificateValidation.fromDns(hostedZone)
-    });
+    const secret = Secret.fromSecretNameV2(this, 'cdk-stack-secrets', 'cdk-stack');
+    const certArn = secret.secretValueFromJson('certificate_arn').unsafeUnwrap();
+
+    const cert = Certificate.fromCertificateArn(this, 'www.devopsdsm.com', certArn);
 
     const cfnDistro = new Distribution(this, 'cfn-distro-for-devopsdsm', {
       defaultBehavior: {
@@ -82,7 +110,25 @@ export class CdkStack extends cdk.Stack {
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         allowedMethods: AllowedMethods.ALLOW_ALL,
       },
-      domainNames: ["devopsdsm.com", "www.devopsdsm.com"],
+      domainNames: ["www.devopsdsm.com"],
+      defaultRootObject: "index.html",
+      certificate: cert
+    });
+
+    const originAccessRoot = new OriginAccessIdentity(this, 'devopsdsm-oai-policy-root', {
+      comment: 'OAI for the CloudFront distribution of s3 static bucket devopsdsm.com'
+    });
+
+    const cfnDistroRoot = new Distribution(this, 'cfn-distro-for-devopsdsm-root-domain', {
+      defaultBehavior: {
+        origin: new S3Origin(s3redirectBucket, { 
+          originAccessIdentity: originAccessRoot
+        }),
+        viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        allowedMethods: AllowedMethods.ALLOW_ALL,
+        cachePolicy: CachePolicy.CACHING_DISABLED
+      },
+      domainNames: ["devopsdsm.com"],
       certificate: cert
     });
 
@@ -93,7 +139,7 @@ export class CdkStack extends cdk.Stack {
     });
 
     new ARecord(this, 'r53-blank-record-to-cfn-distro', {
-      target: RecordTarget.fromAlias(new CloudFrontTarget(cfnDistro)),
+      target: RecordTarget.fromAlias(new CloudFrontTarget(cfnDistroRoot)),
       zone: hostedZone,
       recordName: ''
     });

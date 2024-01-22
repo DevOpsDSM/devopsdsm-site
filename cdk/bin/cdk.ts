@@ -5,11 +5,9 @@ import { CdkStack } from '../lib/cdk-stack';
 
 const app = new cdk.App();
 
-const appConfig = app.node.tryGetContext('config');
-
 new CdkStack(app, 'CdkStack', {
   env: {
-    account: appConfig.account,
-    region: appConfig.region
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+    region: process.env.CDK_DEFAULT_REGION
   }
 }); 
