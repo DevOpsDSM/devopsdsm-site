@@ -1,4 +1,4 @@
-name: 1.Invalidate CloudFront distributions for devopsdsm.com
+name: 1. Invalidate CloudFront distributions
 #This workflow is used to invalidate cloudfront distributions when updates to html files are made
 
 on:
@@ -33,4 +33,4 @@ jobs:
         role-duration-seconds: 1200
     
     - name: Invalidate CloudFront distributions
-      run: aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRO_ID_1 }} --paths '/*''
+      run: aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRO_ID_1 }} --paths '/*'
