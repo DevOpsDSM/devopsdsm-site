@@ -100,7 +100,8 @@ export class CdkStack extends cdk.Stack {
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         allowedMethods: AllowedMethods.ALLOW_ALL,
       },
-      domainNames: ["devopsdsm.com", "www.devopsdsm.com"],
+      domainNames: ["www.devopsdsm.com"],
+      defaultRootObject: "index.html",
       certificate: cert
     });
 
