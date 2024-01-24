@@ -145,31 +145,6 @@ export class CdkStack extends cdk.Stack {
       recordName: ''
     });
 
-    const slackNotificationEmail = secret.secretValueFromJson('slack_notification_email').unsafeUnwrap();
-
-    const budget = new CfnBudget(this, 'devopsdsm-budget', {
-      budget: {
-        budgetName: "devopsdsm-budget",
-        budgetType: "COST",
-        timeUnit: "MONTHLY",
-        budgetLimit: {
-          amount: 25,
-          unit: "USD"
-        }
-      },
-      notificationsWithSubscribers: [{
-        notification: {
-          notificationType: "ACTUAL",
-          comparisonOperator: "GREATER_THAN",
-          threshold: 90
-        },
-        subscribers: [{
-          subscriptionType: "EMAIL",
-          address: slackNotificationEmail
-        }]
-      }]
-    });
-
 
   }
 }
