@@ -145,6 +145,8 @@ export class CdkStack extends cdk.Stack {
       recordName: ''
     });
 
+    const slackNotificationEmail = secret.secretValueFromJson('slack_notification_email').unsafeUnwrap();
+
     new CfnBudget(this, 'devopsdsm-budget', {
       budget: {
         budgetName: "devopsdsm-budget",
@@ -163,7 +165,7 @@ export class CdkStack extends cdk.Stack {
         },
         subscribers: [{
           subscriptionType: "EMAIL",
-          address: "devopsdsm-website-aaaalwojoba5nzs2fzmrenfzpu@sourceallies.slack.com"
+          address: slackNotificationEmail
         }]
       }]
     });
