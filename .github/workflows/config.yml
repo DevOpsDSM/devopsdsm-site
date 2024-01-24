@@ -2,7 +2,7 @@ name: 1. Configure and Deploy CDK
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "add-budget" ]
 
 env:
   AWS_REGION: "us-east-1"

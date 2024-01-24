@@ -9,6 +9,7 @@ import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
+import { CfnBudget } from 'aws-cdk-lib/aws-budgets';
 
 export class CdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: cdk.StackProps) {
@@ -142,6 +143,29 @@ export class CdkStack extends cdk.Stack {
       target: RecordTarget.fromAlias(new CloudFrontTarget(cfnDistroRoot)),
       zone: hostedZone,
       recordName: ''
+    });
+
+    new CfnBudget(this, 'devopsdsm-budget', {
+      budget: {
+        budgetName: "devopsdsm-budget",
+        budgetType: "COST",
+        timeUnit: "MONTHLY",
+        budgetLimit: {
+          amount: 25,
+          unit: "USD"
+        }
+      },
+      notificationsWithSubscribers: [{
+        notification: {
+          notificationType: "ACTUAL",
+          comparisonOperator: "GREATER_THAN",
+          threshold: 90
+        },
+        subscribers: [{
+          subscriptionType: "EMAIL",
+          address: "devopsdsm-website-aaaalwojoba5nzs2fzmrenfzpu@sourceallies.slack.com"
+        }]
+      }]
     });
 
 
