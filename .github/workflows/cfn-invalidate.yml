@@ -32,8 +32,5 @@ jobs:
         role-session-name: GitHub-OIDC
         role-duration-seconds: 1200
     
-    - name: Invalidate CloudFront distribution for root
-      run: aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRO_ID_1 }} --paths '/*'
-
-    - name: Invalidate CloudFront distribution for subdomain
-      run: aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRO_ID_2 }} --paths '/*'
+    - name: Create budget
+      run: aws budgets create-budget --acount-id ${{ secrets.AWS_ACCOUNT }} --budget file://budget.json --notifications-with-subscribers file://notification.json

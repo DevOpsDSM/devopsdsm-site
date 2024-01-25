@@ -1,0 +1,9 @@
+{
+    "BudgetLimit": {
+        "Amount": "25",
+        "Unit": "USD"
+    },
+    "BudgetName": "devopsdsm-site-budget",
+    "BudgetType": "COST",
+    "TimeUnit": "MONTHLY"
+}
