@@ -8,8 +8,8 @@
         },
         "Subscribers": [
             {
-                "Address": "example@example.com",
-                "SubscriptionType": "devopsdsm-website-aaaalwojoba5nzs2fzmrenfzpu@sourceallies.slack.com"
+                "Address": "devopsdsm-website-aaaalwojoba5nzs2fzmrenfzpu@sourceallies.slack.com",
+                "SubscriptionType": "EMAIL"
             }
         ]
     }
