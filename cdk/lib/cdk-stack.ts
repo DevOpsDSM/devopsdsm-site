@@ -9,7 +9,6 @@ import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
-import { CfnBudget } from 'aws-cdk-lib/aws-budgets';
 
 export class CdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: cdk.StackProps) {
