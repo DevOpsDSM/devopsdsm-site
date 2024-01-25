@@ -33,4 +33,4 @@ jobs:
         role-duration-seconds: 1200
     
     - name: Create budget
-      run: aws budgets describe-budgets --account-id ${{ secrets.AWS_ACCOUNT }}
+      run: aws budgets describe-notifications-for-budget --account-id ${{ secrets.AWS_ACCOUNT }} --budget-name devopsdsm-site-budget
