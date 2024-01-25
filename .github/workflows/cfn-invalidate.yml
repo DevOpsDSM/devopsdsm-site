@@ -33,4 +33,4 @@ jobs:
         role-duration-seconds: 1200
     
     - name: Create budget
-      run: aws budgets create-budget --acount-id ${{ secrets.AWS_ACCOUNT }} --budget file://budget.json --notifications-with-subscribers file://notification.json
+      run: aws budgets create-budget --account-id ${{ secrets.AWS_ACCOUNT }} --budget file://budget.json --notifications-with-subscribers file://notification.json
