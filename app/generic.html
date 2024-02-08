@@ -39,7 +39,7 @@
 						<div class="inner">
 							<h1>Contact Us</h1>
 							<span class="image main"><img src="images/pic13.jpg" alt="" /></span>
-							<p>For any communication, please view DevOpsDSM page on <a href="https://www.meetup.com/messages/?new_convo=true&member_id=243618784&name=Matt%20V/">Meetup</a>.</p>
+							<p>For any communication, please view DevOpsDSM page on <a href="https://www.meetup.com/messages/?new_convo=true&member_id=243618784&name=Matt%20V/">Meetup</a>or email the organizers at <span id="email"></span>.</p>
 						</div>
 					</div>
 
@@ -56,6 +56,19 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			<script>
+				// Function to assemble and display the email address
+				function displayEmail() {
+					var user = 'organizers';
+					var domain = 'devopsdsm.com';
+					var element = document.getElementById('email');
+					element.innerHTML = '<a href="mailto:' + user + '@' + domain + '">' + user + '@' + domain + '</a>';
+				}
 
+				// Call the function when the page loads
+				window.onload = function() {
+					displayEmail();
+				};
+			</script>
 	</body>
 </html>
