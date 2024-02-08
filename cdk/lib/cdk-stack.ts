@@ -5,7 +5,7 @@ import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { PolicyStatement, AnyPrincipal, AccountPrincipal } from 'aws-cdk-lib/aws-iam';
 import { AllowedMethods, CachePolicy, Distribution, OriginAccessIdentity, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
 import { S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
-import { ARecord, HostedZone, RecordTarget, TxtRecord } from 'aws-cdk-lib/aws-route53';
+import { ARecord, HostedZone, RecordTarget, TxtRecord, MxRecord } from 'aws-cdk-lib/aws-route53';
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
@@ -150,5 +150,17 @@ export class CdkStack extends cdk.Stack {
         'google-site-verification=alw_5pUucyzG7lcrD4CMztxnMchvrB_dMNj1V_32OPs',
       ],
     });
+
+    new MxRecord(this, 'DevOpsDSMCombinedMxRecords', {
+      zone: hostedZone,
+      values: [
+        { priority: 1, hostName: 'ASPMX.L.GOOGLE.COM.' },
+        { priority: 5, hostName: 'ALT1.ASPMX.L.GOOGLE.COM.' },
+        { priority: 5, hostName: 'ALT2.ASPMX.L.GOOGLE.COM.' },
+        { priority: 10, hostName: 'ALT3.ASPMX.L.GOOGLE.COM.' },
+        { priority: 10, hostName: 'ALT4.ASPMX.L.GOOGLE.COM.' }
+      ],
+    });    
+
   }
 }
