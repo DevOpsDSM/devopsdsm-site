@@ -5,7 +5,7 @@ import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { PolicyStatement, AnyPrincipal, AccountPrincipal } from 'aws-cdk-lib/aws-iam';
 import { AllowedMethods, CachePolicy, Distribution, OriginAccessIdentity, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
 import { S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
-import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
+import { ARecord, HostedZone, RecordTarget, TxtRecord } from 'aws-cdk-lib/aws-route53';
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
@@ -144,6 +144,11 @@ export class CdkStack extends cdk.Stack {
       recordName: ''
     });
 
-
+    new TxtRecord(this, 'TXTRecord', {
+      zone: hostedZone,
+      values: [
+        'google-site-verification=alw_5pUucyzG7lcrD4CMztxnMchvrB_dMNj1V_32OPs',
+      ],
+    });
   }
 }
